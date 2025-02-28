@@ -1,5 +1,5 @@
-FROM amazonlinux:2023
-LABEL maintainer="Jeff Geerling"
+FROM registry.redhat.io/rhel9/rhel-bootc:latest
+LABEL maintainer="Keyon Genesis"
 ENV container=docker
 
 ENV pip_packages "ansible"
