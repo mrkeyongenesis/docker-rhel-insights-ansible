@@ -1,8 +1,6 @@
-# Amazon Linux 2023 Ansible Test Image
+# RHEL Linux 2025 Ansible Test Image
 
-[![Build](https://github.com/geerlingguy/docker-amazonlinux2023-ansible/actions/workflows/build.yml/badge.svg)](https://github.com/geerlingguy/docker-amazonlinux2023-ansible/actions/workflows/build.yml) [![Docker pulls](https://img.shields.io/docker/pulls/geerlingguy/docker-amazonlinux2023-ansible)](https://hub.docker.com/r/geerlingguy/docker-amazonlinux2023-ansible/)
-
-Amazon Linux 2023 Docker container for Ansible playbook and role testing.
+RHEL Linux 2025 Docker container for Ansible playbook and role testing.
 
 ## Tags
 
@@ -16,23 +14,8 @@ This image is built on Docker Hub automatically any time the upstream OS contain
 
   1. [Install Docker](https://docs.docker.com/engine/installation/).
   2. `cd` into this directory.
-  3. Run `docker build -t amazonlinux2023-ansible .`
+  3. Run `docker build -t rhel2025-ansible .`
 
-## How to Use
 
-  1. [Install Docker](https://docs.docker.com/engine/installation/).
-  2. Pull this image from Docker Hub: `docker pull geerlingguy/docker-amazonlinux2023-ansible:latest` (or use the image you built earlier, e.g. `amazonlinux2023-ansible:latest`).
-  3. Run a container from the image: `docker run --detach --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host geerlingguy/docker-amazonlinux2023-ansible:latest` (to test my Ansible roles, I add in a volume mounted from the current working directory with ``--volume=`pwd`:/etc/ansible/roles/role_under_test:ro``).
-  4. Use Ansible inside the container:
-    a. `docker exec --tty [container_id] env TERM=xterm ansible --version`
-    b. `docker exec --tty [container_id] env TERM=xterm ansible-playbook /path/to/ansible/playbook.yml --syntax-check`
 
-## Notes
-
-I use Docker to test my Ansible roles and playbooks on multiple OSes using CI tools like Jenkins and Travis. This container allows me to test roles and playbooks using Ansible running locally inside the container.
-
-> **Important Note**: I use this image for testing in an isolated environment—not for production—and the settings and configuration used may not be suitable for a secure and performant production environment. Use on production servers/in the wild at your own risk!
-
-## Author
-
-Created in 2023 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+Feel free to replace any placeholders like `yourusername` with your actual Docker Hub username. Let me know if you need further adjustments!
