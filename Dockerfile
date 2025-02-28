@@ -1,44 +1,28 @@
-FROM registry.redhat.io/rhel9/rhel-bootc:latest
-LABEL maintainer="Keyon Genesis"
-ENV container=docker
+FROM redhat/ubi9:latest
+ENV container docker
 
-ENV pip_packages "ansible"
+# Set environemtn variable for subscription
+ENV RHSM_USERNAME=
+ENV RHSM_PASSWORD=
 
-# Install systemd -- See https://hub.docker.com/_/centos/
-RUN rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
-rm -f /lib/systemd/system/local-fs.target.wants/*; \
-rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
-rm -f /lib/systemd/system/anaconda.target.wants/*;
+# Install required packages
+#RUN subscription-manager register --username tcarter528 --password NULLRedHat1 --auto-attach
+RUN subscription-manager register --username ${RHSM_USERNAME} --password ${RHSM_PASSWORD} --auto-attach
 
-# Install requirements.
-RUN yum -y install rpm dnf-plugins-core \
- && yum -y update \
- && yum -y install \
-      initscripts \
-      sudo \
-      which \
-      hostname \
-      libyaml-devel \
-      python3 \
-      python3-pip \
-      python3-pyyaml \
- && yum clean all
+RUN dnf update
+RUN dnf install -y net-tools
+RUN dnf install -y iputils
+RUN dnf install -y traceroute
+RUN dnf install -y mlocate 
+RUN dnf install -y java-1.8.0-openjdk.x86_64
+RUN dnf install -y ansible-core
+RUN subscription-manager unregister
+RUN updatedb
 
-# Upgrade pip to latest version.
-#RUN pip3 install --upgrade pip
+CMD ["/bin/bash"]
 
-# Install Ansible via Pip.
-RUN pip3 install $pip_packages
-
-# Disable requiretty.
-RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
-
-# Install Ansible inventory file.
-RUN mkdir -p /etc/ansible
-RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
-
-VOLUME ["/sys/fs/cgroup"]
-CMD ["/usr/lib/systemd/systemd"]
+# docker build --no-cache -t rhel9-ansible .
+# docker run -itd --rm --name rhel9-ansiblehost rhel9-ansible
+# docker container ls
+# docker exec -it ba9920659ac7 bash
+# docker stop ba9920659ac7
